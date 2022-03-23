@@ -1,3 +1,4 @@
+import { configurarUsuario } from './../sockets/socket';
 import { SERVER_PORT } from '../global/environment';
 import express from 'express';
 import socketIO from 'socket.io';
@@ -56,12 +57,21 @@ export default class Server {
 
             console.log("Cliente nuevo conectado");
 
+            console.log( cliente.id );
+
+            //Conectar Cliente
+            miSocket.conectarCliente( cliente );
+
+            //Configurar Usuario 
+            miSocket.configurarUsuario( cliente, this.io );
+
             //Mensajes
             miSocket.mensaje( cliente, this.io );
 
 
            //Desconección
            miSocket.desconectar( cliente );
+
 
         });
 

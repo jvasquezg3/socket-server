@@ -1,6 +1,7 @@
 //archivo para crear las apis rest
 
 import {Router, Request, Response} from "express";
+import Server from "../clases/server";
 
 const ruta = Router();
 
@@ -16,10 +17,20 @@ ruta.get("/mensajes", ( req: Request, res: Response ) => {
 
 });
 
-ruta.post("/mensajes", ( req: Request, res: Response ) => {
+ruta.post("/mensajes/", ( req: Request, res: Response ) => {
 
     const cuerpo = req.body.cuerpo;
     const de = req.body.de;
+
+    const payload = {
+        de,
+        cuerpo
+    }
+
+    const server = Server.instance;
+
+    server.io.emit( 'mensaje-nuevo', payload );
+ 
 
     res.json({
 
@@ -37,6 +48,15 @@ ruta.post("/mensajes/:id", ( req: Request, res: Response ) => {
     const cuerpo = req.body.cuerpo;
     const de = req.body.de;
     const id = req.params.id;
+
+    const payload = {
+        de,
+        cuerpo
+    }
+
+    const server = Server.instance;
+
+    server.io.in( id ).emit( 'mensaje-privado', payload );
 
     res.json({
 
