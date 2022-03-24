@@ -1,3 +1,5 @@
+import { usuariosConectados } from './../sockets/socket';
+import { Socket } from 'socket.io';
 //archivo para crear las apis rest
 
 import {Router, Request, Response} from "express";
@@ -69,5 +71,35 @@ ruta.post("/mensajes/:id", ( req: Request, res: Response ) => {
 
 
 });
+
+
+// Servicio para obtener todos los Id's dse los usuaios
+ruta.get('/usuarios', (req: Request, res: Response) => {
+    const server = Server.instance;
+    server.io .allSockets().then( (clientes) => {
+            res.json({
+                ok: true,
+                clientes : Array.from(clientes)
+        });    
+    })
+    .catch( err =>{
+        res.json({
+            ok: false,
+            err,
+        });
+    })
+});
+
+//Obtener usuarios y sus nombres 
+ruta.get('/usuarios/detalle', ( req: Request, res: Response ) => {
+
+    usuariosConectados
+    res.json({
+        ok: true,
+        clientes: usuariosConectados.getLista()
+    });
+
+});
+
 
 export default ruta;

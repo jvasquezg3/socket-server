@@ -60,17 +60,21 @@ export default class Server {
             console.log( cliente.id );
 
             //Conectar Cliente
-            miSocket.conectarCliente( cliente );
+            miSocket.conectarCliente( cliente, this.io );
 
             //Configurar Usuario 
             miSocket.configurarUsuario( cliente, this.io );
+
+            //Obtener Usuarios activos
+            miSocket.obtenerUsuarios( cliente, this.io );
+
 
             //Mensajes
             miSocket.mensaje( cliente, this.io );
 
 
            //Desconección
-           miSocket.desconectar( cliente );
+           miSocket.desconectar( cliente, this.io );
 
 
         });
